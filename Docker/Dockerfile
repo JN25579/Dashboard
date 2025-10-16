@@ -10,4 +10,5 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Run migrations at container start then launch the server
+CMD ["sh", "-c", "npm run migrate && npm start"]

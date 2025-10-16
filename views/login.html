@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign in — Dashboard</title>
+    <link rel="stylesheet" href="/static/login.css?v=4B9898BFE0B5" />
+  </head>
+  <body>
+    <main class="login-root" aria-labelledby="login-title">
+      <aside class="hero" aria-hidden="true">
+        <div class="hero-inner">
+          <svg
+            class="hero-illu"
+            width="240"
+            height="160"
+            viewBox="0 0 240 160"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect x="0" y="0" width="240" height="160" rx="12" fill="url(#g)" />
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2563eb" stop-opacity="0.9" />
+                <stop offset="1" stop-color="#7c3aed" stop-opacity="0.85" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <h1 class="hero-title">Welcome back</h1>
+          <p class="hero-sub">
+            Sign in to manage your workspace, view reports and control
+            integrations.
+          </p>
+        </div>
+      </aside>
+
+      <section class="card" role="region" aria-label="Sign in form">
+        <h2 id="login-title">Sign in to your account</h2>
+        <form id="loginForm" class="login-form" novalidate>
+          <label class="field">
+            <span class="label">Email</span>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+            />
+            <div class="error" id="emailError" aria-live="polite"></div>
+          </label>
+
+          <label class="field field-password">
+            <span class="label">Password</span>
+            <div class="password-row">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                class="show-pass"
+                id="togglePassword"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                <!-- Accessible inline SVG: eye (visible) and eye-off (hidden) paths toggled via CSS/JS -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <g id="eye-visible">
+                    <path
+                      d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      fill="none"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      fill="none"
+                    />
+                  </g>
+                  <g id="eye-hidden" style="display: none">
+                    <path
+                      d="M17.94 17.94A10.97 10.97 0 0 1 12 19c-7 0-11-7-11-7a20.9 20.9 0 0 1 4.12-5.12"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      fill="none"
+                    />
+                    <path
+                      d="M1 1l22 22"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                  </g>
+                </svg>
+              </button>
+            </div>
+            <div class="error" id="passwordError" aria-live="polite"></div>
+          </label>
+
+          <div class="actions">
+            <button id="submit" type="submit" class="btn primary">
+              <span class="btn-text">Sign in</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+          </div>
+        </form>
+
+        <p class="muted">Need help? Contact your administrator.</p>
+        <p class="legal">
+          By signing in you agree to the <a href="#">Terms</a> and
+          <a href="#">Privacy</a>.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      // Client-side validation and fetch-based submit so we can display errors nicely
+      const form = document.getElementById("loginForm");
+      const emailEl = document.getElementById("email");
+      const passEl = document.getElementById("password");
+      const emailError = document.getElementById("emailError");
+      const passError = document.getElementById("passwordError");
+
+      function validate() {
+        let ok = true;
+        emailError.textContent = "";
+        passError.textContent = "";
+        if (!emailEl.value || !emailEl.value.includes("@")) {
+          emailError.textContent = "Please enter a valid email";
+          ok = false;
+        }
+        if (!passEl.value || passEl.value.length < 4) {
+          passError.textContent = "Password must be at least 4 characters";
+          ok = false;
+        }
+        return ok;
+      }
+
+      const toggle = document.getElementById("togglePassword");
+      toggle &&
+        toggle.addEventListener("click", () => {
+          const t = passEl;
+          const svg = toggle.querySelector("svg");
+          const eyeVisible = svg && svg.querySelector("#eye-visible");
+          const eyeHidden = svg && svg.querySelector("#eye-hidden");
+          if (t.type === "password") {
+            t.type = "text";
+            toggle.classList.add("visible");
+            toggle.setAttribute("aria-pressed", "true");
+            if (eyeVisible) eyeVisible.style.display = "none";
+            if (eyeHidden) eyeHidden.style.display = "inline";
+          } else {
+            t.type = "password";
+            toggle.classList.remove("visible");
+            toggle.setAttribute("aria-pressed", "false");
+            if (eyeVisible) eyeVisible.style.display = "inline";
+            if (eyeHidden) eyeHidden.style.display = "none";
+          }
+        });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!validate()) return;
+        const payload = { email: emailEl.value, password: passEl.value };
+        const btn = document.getElementById("submit");
+        btn.disabled = true;
+        btn.classList.add("loading");
+        try {
+          const res = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json().catch(() => null);
+          if (!res.ok) {
+            const msg = data && data.error ? data.error : "Login failed";
+            passError.textContent = msg;
+            btn.disabled = false;
+            btn.classList.remove("loading");
+            return;
+          }
+          // success — redirect to root
+          window.location.href = "/";
+        } catch (err) {
+          passError.textContent = "Network error";
+          btn.disabled = false;
+          btn.classList.remove("loading");
+        }
+      });
+    </script>
+  </body>
+</html>

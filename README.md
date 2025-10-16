@@ -39,6 +39,43 @@ Examples:
 
 These scripts simply wrap `docker-compose` and pass the selected flags. They print the actual command they run so you can copy/paste it for manual runs.
 
+## Database (MySQL)
+
+The compose stack runs MySQL and maps a host port to the container port. By default the host port is `3307` to avoid conflicts with a local MySQL instance. The port value is set in the `.env` files as `DB_HOST_PORT`.
+
+To import the example schema provided in `scripts/db/init.sql` into the running MySQL container:
+
+```powershell
+# Copy SQL into the container and import using the mysql client (uses root password from .env)
+docker cp scripts/db/init.sql dashboard_db_instance:/init.sql
+docker exec -i dashboard_db_instance sh -c "mysql -u root -p\"$Env:MYSQL_ROOT_PASSWORD\" $Env:MYSQL_DATABASE < /init.sql"
+```
+
+Or, from the host, connect with a MySQL client:
+
+```powershell
+# Connect using root (replace with your client of choice)
+:mysql -h 127.0.0.1 -P $Env:DB_HOST_PORT -u root -p
+```
+
+If the `mysql` client isn't installed on your host, you can run it from a temporary container:
+
+```powershell
+docker run -it --rm mysql:8.0 mysql -h host.docker.internal -P $Env:DB_HOST_PORT -u root -p
+```
+
+Adminer (web UI)
+
+An Adminer instance is available at http://localhost:8080. Use the following values to log in:
+
+- System: MySQL
+- Server: host.docker.internal (or 127.0.0.1)
+- Username: dashboard_user (or root)
+- Password: password (or the root password from `.env`)
+- Database: dashboard_db
+
+Adminer runs in the `adminer` container and is mapped to host port 8080 by compose.
+
 ## Running with Docker Compose
 
 This repository includes a top-level `docker-compose.yml` that mirrors the configuration in `Docker/docker.yml` but is configured to load environment variables from the `Docker/.env` file and a root `.env` for convenience.

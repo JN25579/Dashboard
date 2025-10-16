@@ -1,0 +1,152 @@
+     :root {
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --font-family: Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      padding: 20px;
+      color: #343a40;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      border-bottom: 2px solid var(--bg-color);
+      padding-bottom: 10px;
+      margin-top: 30px;
+      color: var(--secondary-color);
+    }
+
+    .quote {
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 20px;
+      color: #495057;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e9ecef;
+      color: var(--secondary-color);
+    }
+
+    /* Checklists */
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      background: #e9f7ff;
+      margin-bottom: 5px;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .checklist input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    .checklist strong {
+      color: var(--primary-color);
+    }
+
+    /* Income Totals */
+    #income-totals {
+      padding: 15px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #income-totals span {
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+
+    .asset-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+
+    .status-Launched {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .status-InProgress {
+      background-color: #ffc107;
+      color: #343a40;
+    }
+
+    .status-Idea {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    /* Income Form */
+    #income-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    #income-form input,
+    #income-form select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #income-form button {
+      background-color: var(--success-color);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
