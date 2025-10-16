@@ -16,5 +16,33 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
 
+  dashboard-app:
+    build:
+      context: .
+    container_name: dashboard_app
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT}:${CONTAINER_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: dashboard_db_instance
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
 volumes:
   n8n_data:
+  mysql_data:
