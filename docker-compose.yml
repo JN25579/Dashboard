@@ -17,12 +17,13 @@ services:
   dashboard-app:
     build:
       context: .
+      dockerfile: Docker/Dockerfile
     container_name: dashboard_app
     restart: unless-stopped
     ports:
       - "${HOST_PORT}:${CONTAINER_PORT}"
     env_file:
-      - .env
+      - Docker/.env
     volumes:
       - .:/app
       - /app/node_modules
