@@ -8,13 +8,14 @@
     "test": "jest --runInBand"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "mysql2": "^3.3.3",
-  "bcryptjs": "^2.4.3",
-    "dotenv": "^16.3.1"
-  }
-  ,
+    "mysql2": "^3.3.3"
+  },
   "devDependencies": {
     "jest": "^29.6.1",
     "supertest": "^6.3.3"

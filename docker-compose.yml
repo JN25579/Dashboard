@@ -24,7 +24,6 @@ services:
       - "${HOST_PORT}:${CONTAINER_PORT}"
     env_file:
       - Docker/.env
-    # no volumes: use files baked into the image (node_modules present in image)
     depends_on:
       - db
 

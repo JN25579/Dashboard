@@ -119,6 +119,14 @@
           </div>
         </form>
 
+
+        <form id="signup-form">
+          <input type="text" id="signup-name" placeholder="Name" required />
+          <input type="email" id="signup-email" placeholder="Email" required />
+          <input type="password" id="signup-password" placeholder="Password" required />
+          <button type="submit">Sign Up</button>
+        </form>
+
         <p class="muted">Need help? Contact your administrator.</p>
         <p class="legal">
           By signing in you agree to the <a href="#">Terms</a> and
@@ -128,13 +136,39 @@
     </main>
 
     <script>
-      // Client-side validation and fetch-based submit so we can display errors nicely
       const form = document.getElementById("loginForm");
       const emailEl = document.getElementById("email");
       const passEl = document.getElementById("password");
       const emailError = document.getElementById("emailError");
       const passError = document.getElementById("passwordError");
 
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("signup-form");
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = document.getElementById("signup-name").value;
+          const email = document.getElementById("signup-email").value;
+          const password = document.getElementById("signup-password").value;
+
+          try {
+            const res = await fetch("/signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+              alert("User created successfully!");
+            } else {
+              alert("Error: " + data.error);
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Something went wrong.");
+          }
+        });
+      });
       function validate() {
         let ok = true;
         emailError.textContent = "";

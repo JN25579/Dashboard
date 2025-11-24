@@ -1,33 +1,14 @@
 services:
-  n8n:
-    image: n8nio/n8n
-    container_name: n8n
-    restart: always
-    ports:
-      - "5678:5678"
-    environment:
-      - N8N_HOST=${N8N_HOST}
-      - N8N_PORT=${N8N_PORT}
-      - N8N_PROTOCOL=${N8N_PROTOCOL}
-      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-    volumes:
-      - n8n_data:/home/node/.n8n
-
-  dashboard-app:
+  dashboard_app:
     build:
-      # When this compose file is executed from the Docker/ folder the build
-      # context should be the repository root so package.json and the app
-      # sources are available during image build.
       context: ..
       dockerfile: Docker/Dockerfile
     container_name: dashboard_app
     restart: unless-stopped
     ports:
-      - "${HOST_PORT}:${CONTAINER_PORT}"
+      - "8081:3000"
     env_file:
       - .env
-    # no volumes: use files baked into the image (node_modules present in image)
     depends_on:
       - db
 
@@ -36,12 +17,12 @@ services:
     container_name: dashboard_db_instance
     restart: always
     ports:
-      - "${DB_HOST_PORT}:3306"
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: dashboard_db
+      MYSQL_USER: dashboard_user
+      MYSQL_PASSWORD: securepassword
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -55,5 +36,4 @@ services:
       - db
 
 volumes:
-  n8n_data:
   mysql_data:

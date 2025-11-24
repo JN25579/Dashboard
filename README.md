@@ -54,7 +54,6 @@ docker exec -i dashboard_db_instance sh -c "mysql -u root -p\"$Env:MYSQL_ROOT_PA
 Or, from the host, connect with a MySQL client:
 
 ```powershell
-# Connect using root (replace with your client of choice)
 :mysql -h 127.0.0.1 -P $Env:DB_HOST_PORT -u root -p
 ```
 

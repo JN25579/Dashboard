@@ -1,14 +1,14 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Copy dependencies
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
 
 EXPOSE 3000
 
-# Run migrations at container start then launch the server
-CMD ["sh", "-c", "npm run migrate && npm start"]
+# Start the server
+CMD ["node", "server.js"]

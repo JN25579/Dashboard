@@ -2,7 +2,5 @@ version: '3.8'
 services:
   dashboard-app:
     volumes:
-      # Mount only the static and views folders for rapid front-end iteration
       - ./static:/app/static:rw
       - ./views:/app/views:rw
-    # Do not mount node_modules or the whole project to avoid masking image-installed native modules
